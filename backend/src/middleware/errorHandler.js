@@ -38,7 +38,7 @@ const errorHandler = (err, req, res, next) => {
     message = 'Authentication token expired';
   }
 
-  // Handle Multer upload errors
+  // Handle Multer upload errors and invalid file types
   if (err.name === 'MulterError') {
     statusCode = 400;
     if (err.code === 'LIMIT_FILE_SIZE') {
@@ -46,6 +46,9 @@ const errorHandler = (err, req, res, next) => {
     } else {
       message = `Upload error: ${err.message}`;
     }
+  } else if (err.message && err.message.includes('Invalid file format')) {
+    statusCode = 400;
+    message = err.message;
   }
 
   if (process.env.NODE_ENV !== 'production' && statusCode === 500) {

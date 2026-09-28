@@ -46,4 +46,38 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const optionalAuth = async (req, res, next) => {
+  let token;
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return next();
+  }
+
+  try {
+    const decoded = verifyToken(token);
+    const user = await User.findById(decoded.id).select('-password');
+    if (user && user.accountStatus === 'active') {
+      req.user = user;
+    }
+  } catch (e) {
+    // Silently continue for optional auth
+  }
+  next();
+};
+
+const requireRole = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `Forbidden. Role '${req.user?.role || 'anonymous'}' is not authorized to access this resource.`,
+      });
+    }
+    next();
+  };
+};
+
+module.exports = { protect, optionalAuth, requireRole };

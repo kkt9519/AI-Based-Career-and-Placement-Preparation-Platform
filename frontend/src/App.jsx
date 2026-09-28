@@ -15,20 +15,13 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import DashboardPage from './pages/DashboardPage';
-
-// Placeholder view for modules to be built in subsequent phases
-const ModulePlaceholder = ({ title, phase, description }) => (
-  <div className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 text-center space-y-4 max-w-xl mx-auto my-12">
-    <div className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300">
-      Phase {phase} Module
-    </div>
-    <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">{title}</h2>
-    <p className="text-sm text-slate-600 dark:text-slate-400">{description}</p>
-    <p className="text-xs text-slate-400 font-mono">
-      CareerPilot AI • Production MERN Pipeline
-    </p>
-  </div>
-);
+import ProfilePage from './pages/ProfilePage';
+import ResumeAnalyzerPage from './pages/ResumeAnalyzerPage';
+import CareerRoadmapPage from './pages/CareerRoadmapPage';
+import JobsPage from './pages/JobsPage';
+import MockInterviewPage from './pages/MockInterviewPage';
+import AssessmentsPage from './pages/AssessmentsPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 
 // App Layout with Sidebar for Authenticated Pages
 const AppLayout = ({ children }) => {
@@ -76,11 +69,7 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <AppLayout>
-                        <ModulePlaceholder
-                          title="Student Profile Management"
-                          phase="2"
-                          description="Full profile editor with education details, GPA, GitHub/LinkedIn links, and target role customization."
-                        />
+                        <ProfilePage />
                       </AppLayout>
                     </ProtectedRoute>
                   }
@@ -91,11 +80,7 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <AppLayout>
-                        <ModulePlaceholder
-                          title="AI Resume Analyzer"
-                          phase="3"
-                          description="Upload PDF/DOCX resumes, extract text, and receive Gemini-powered ATS scores and keyword suggestions."
-                        />
+                        <ResumeAnalyzerPage />
                       </AppLayout>
                     </ProtectedRoute>
                   }
@@ -106,11 +91,7 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <AppLayout>
-                        <ModulePlaceholder
-                          title="Personalized Career Roadmap"
-                          phase="3"
-                          description="Step-by-step career milestones and learning tracks for MERN, Java, and Full Stack Developer roles."
-                        />
+                        <CareerRoadmapPage />
                       </AppLayout>
                     </ProtectedRoute>
                   }
@@ -121,11 +102,7 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <AppLayout>
-                        <ModulePlaceholder
-                          title="Job & Internship Board"
-                          phase="4"
-                          description="Browse opportunities with transparent skill-match scoring and track your application statuses."
-                        />
+                        <JobsPage />
                       </AppLayout>
                     </ProtectedRoute>
                   }
@@ -136,11 +113,7 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <AppLayout>
-                        <ModulePlaceholder
-                          title="AI Mock Interview Simulator"
-                          phase="5"
-                          description="Practice real-time Technical and HR interviews with AI-driven scoring and personalized suggestions."
-                        />
+                        <MockInterviewPage />
                       </AppLayout>
                     </ProtectedRoute>
                   }
@@ -151,11 +124,7 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <AppLayout>
-                        <ModulePlaceholder
-                          title="Aptitude & Coding Practice"
-                          phase="6"
-                          description="Quantitative, Logical, Verbal, and Core CS assessments with timed tests and detailed answer explanations."
-                        />
+                        <AssessmentsPage />
                       </AppLayout>
                     </ProtectedRoute>
                   }
@@ -167,11 +136,7 @@ function App() {
                   element={
                     <AdminRoute>
                       <AppLayout>
-                        <ModulePlaceholder
-                          title="Admin Overview & Platform Analytics"
-                          phase="7"
-                          description="Monitor platform activity, registered student counts, interview metrics, and active jobs."
-                        />
+                        <AdminDashboardPage />
                       </AppLayout>
                     </AdminRoute>
                   }
@@ -182,11 +147,7 @@ function App() {
                   element={
                     <AdminRoute>
                       <AppLayout>
-                        <ModulePlaceholder
-                          title="Admin Management Console"
-                          phase="7"
-                          description="Manage students, edit job listings, and curate question banks."
-                        />
+                        <AdminDashboardPage />
                       </AppLayout>
                     </AdminRoute>
                   }

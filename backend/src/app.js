@@ -7,6 +7,13 @@ const errorHandler = require('./middleware/errorHandler');
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const resumeRoutes = require('./routes/resumeRoutes');
+const careerRoutes = require('./routes/careerRoutes');
+const jobRoutes = require('./routes/jobRoutes');
+const interviewRoutes = require('./routes/interviewRoutes');
+const assessmentRoutes = require('./routes/assessmentRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
@@ -66,6 +73,13 @@ app.get('/api/health', (req, res) => {
 
 // Mount Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/resumes', resumeRoutes);
+app.use('/api/career', careerRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/interviews', interviewRoutes);
+app.use('/api/assessments', assessmentRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 Handler
 app.use((req, res) => {
