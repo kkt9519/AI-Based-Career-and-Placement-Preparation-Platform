@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerPilot AI – Capstone Project Presentation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #f8fafc;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .slide-container {
+      width: 90vw;
+      max-width: 1200px;
+      height: 80vh;
+      max-height: 700px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      padding: 48px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      animation: fadeIn 0.4s ease;
+    }
+    .slide-container.active { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .slide-header {
+      margin-bottom: 20px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(37, 99, 235, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      margin-bottom: 8px;
+    }
+    .slide-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      flex-grow: 1;
+      margin-bottom: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      flex-grow: 1;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #38bdf8;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title.accent { color: #34d399; }
+    .card-title.danger { color: #fb7185; }
+    .card-title.warning { color: #fbbf24; }
+    ul { list-style: none; }
+    li {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+      position: relative;
+      padding-left: 18px;
+    }
+    li::before {
+      content: "•";
+      color: #60a5fa;
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+    .hero-title {
+      font-size: 52px;
+      font-weight: 900;
+      background: linear-gradient(to right, #60a5fa, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    .hero-subtitle {
+      font-size: 22px;
+      color: #94a3b8;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #64748b;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 16px;
+    }
+    .nav-controls {
+      position: fixed;
+      bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: #1f2937;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    }
+    .nav-btn {
+      background: #374151;
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav-btn:hover { background: #4b5563; }
+    .slide-counter { font-size: 13px; font-weight: 700; color: #94a3b8; min-width: 60px; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <!-- Slide 1: Title -->
+  <div class="slide-container active" id="slide-1">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+      <div class="badge">FINAL YEAR B.TECH CAPSTONE PROJECT</div>
+      <h1 class="hero-title">CareerPilot AI</h1>
+      <p class="hero-subtitle">AI-Based Career and Placement Preparation Platform</p>
+      <p style="font-size: 15px; color: #cbd5e1; max-width: 700px; line-height: 1.6; margin-bottom: 24px;">
+        An enterprise-grade, full-stack MERN platform augmenting campus placement preparation through Google Gemini AI, ATS resume scoring, real-time mock interviews, and automated learning analytics.
+      </p>
+      <div style="font-size: 13px; color: #94a3b8; line-height: 1.8;">
+        <strong>Department:</strong> Computer Science & Design &nbsp;|&nbsp; <strong>Academic Year:</strong> 2025–2026<br>
+        <strong>Tech Stack:</strong> React 18, Node.js, Express, MongoDB, Google Gemini 1.5 Flash, Tailwind CSS
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>CareerPilot AI Capstone Defense</span>
+      <span>Press Right Arrow &rarr; to advance</span>
+    </div>
+  </div>
+
+  <!-- Slide 2: Problem Statement -->
+  <div class="slide-container" id="slide-2">
+    <div class="slide-header">
+      <div class="badge">BACKGROUND & MOTIVATION</div>
+      <h2 class="slide-title">Problem Statement & Industry Context</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title danger">1. Automated ATS Filtering</div>
+        <ul>
+          <li>Over 75% of candidate resumes are filtered out by automated ATS before human recruiter review.</li>
+          <li>Students lack feedback on missing technical keywords, poor formatting, and unparsed tables.</li>
+          <li>Generic resumes fail to showcase project metrics and measurable outcomes.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title warning">2. Interview Practice Void</div>
+        <ul>
+          <li>Students experience intense anxiety during on-campus technical and HR placement interviews.</li>
+          <li>Limited access to expert senior interviewers for personalized feedback.</li>
+          <li>Subjective evaluation without multi-criteria scoring rubrics.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">3. Fragmented Ecosystem</div>
+        <ul>
+          <li>Students juggle separate platforms for DSA (LeetCode), roadmaps (YouTube), and job boards.</li>
+          <li>No single metric tracks overall "Placement Readiness Index" (0–100%).</li>
+          <li>College placement cells lack visibility into candidate readiness.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 2 of 15</span>
+      <span>Problem Statement</span>
+    </div>
+  </div>
+
+  <!-- Slide 3: Objectives & Solution -->
+  <div class="slide-container" id="slide-3">
+    <div class="slide-header">
+      <div class="badge">SYSTEM OBJECTIVES</div>
+      <h2 class="slide-title">Proposed Solution & Key Innovations</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Core Project Objectives</div>
+        <ul>
+          <li><strong>AI Resume ATS Analyzer:</strong> Parse multi-format documents (.pdf/.docx) and compute 0-100 ATS scores with 4-category breakdowns.</li>
+          <li><strong>AI Mock Interview Studio:</strong> Interactive timed technical and HR interview rounds with 5-criteria instant scoring.</li>
+          <li><strong>Aptitude & Coding Practice:</strong> Timed test engine spanning Quant, Logical, Verbal, Core CS, and LeetCode-style challenges.</li>
+          <li><strong>Placement Roadmaps & Job Portal:</strong> Milestone checklists and job compatibility algorithm (75% Required + 25% Preferred).</li>
+          <li><strong>Admin Console:</strong> Institutional candidate governance, analytics KPIs, and Question Bank CRUD.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Key Innovations</div>
+        <ul>
+          <li><strong>Dual-Engine AI Architecture:</strong> Integrates Google Gemini 1.5 Flash with a Semantic Heuristic Fallback engine for 100% uptime.</li>
+          <li><strong>Real-Time Placement Readiness Index:</strong> Dynamically calculates 0-100% preparation scores from database aggregates.</li>
+          <li><strong>Institutional Security:</strong> HttpOnly SameSite cookie authentication, bcrypt hashing, and privilege escalation defense.</li>
+          <li><strong>100% Test Automation:</strong> 70 automated tests with zero paid API call costs via Jest mock isolation.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 3 of 15</span>
+      <span>System Objectives</span>
+    </div>
+  </div>
+
+  <!-- Slide 4: System Architecture -->
+  <div class="slide-container" id="slide-4">
+    <div class="slide-header">
+      <div class="badge">ENGINEERING ARCHITECTURE</div>
+      <h2 class="slide-title">Full-Stack System Architecture</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Frontend (Vite + React)</div>
+        <ul>
+          <li>React 18 Single Page Application with Tailwind CSS 3.4.</li>
+          <li>Axios client configured with <code>withCredentials: true</code>.</li>
+          <li>Client routing secured by <code>ProtectedRoute</code> & <code>AdminRoute</code>.</li>
+          <li>Interactive circular SVG gauges, category progress bars, and timed quiz palettes.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Backend (Express & Node.js)</div>
+        <ul>
+          <li>RESTful modular API (Controllers, Middleware, Routes, Validators).</li>
+          <li>Token retrieval from HttpOnly cookies with Bearer header fallback.</li>
+          <li>Multer file streaming + <code>pdf-parse</code> sanitization.</li>
+          <li>Dedicated <code>authLimiter</code> blocking brute-force attacks.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title warning">Database & AI Engine</div>
+        <ul>
+          <li>MongoDB with Mongoose ODM modeling 10 distinct collections.</li>
+          <li>Bcrypt password hashing (10 salt rounds) in pre-save hooks.</li>
+          <li>Google Gemini 1.5 Flash official SDK integration.</li>
+          <li>Disk cleanup on resume deletion to prevent storage leaks.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 4 of 15</span>
+      <span>System Architecture</span>
+    </div>
+  </div>
+
+  <!-- Slide 5: AI Resume Analyzer -->
+  <div class="slide-container" id="slide-5">
+    <div class="slide-header">
+      <div class="badge">MODULE 1</div>
+      <h2 class="slide-title">AI Resume Analyzer & ATS Scorer</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Ingestion & Extraction Pipeline</div>
+        <ul>
+          <li><strong>Multi-Format Upload:</strong> Accepts .pdf and .docx documents up to 5MB via Multer.</li>
+          <li><strong>Text Sanitization:</strong> <code>pdf-parse</code> strips non-printable control characters and normalizes whitespace.</li>
+          <li><strong>Role Calibration:</strong> Calibrates resume keywords against target roles (MERN, Java, Full Stack, Frontend).</li>
+          <li><strong>Dual-Engine Execution:</strong> Sends structured JSON prompt to Gemini 1.5 Flash; automatically falls back to heuristic engine if quota is exceeded.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Evaluation Output & Feedback</div>
+        <ul>
+          <li><strong>Overall Score:</strong> Recruiter-calibrated score out of 100.</li>
+          <li><strong>Category Breakdown:</strong> Impact & Metrics, Completeness, Technical Skills, and ATS Formatting.</li>
+          <li><strong>Skill Gap Matrix:</strong> Visual chips contrasting identified skills vs. missing competencies.</li>
+          <li><strong>Actionable Feedback:</strong> Profile strengths, weaknesses, and concrete recommendations to boost pass rates.</li>
+          <li><strong>Academic Disclaimer:</strong> Clearly states score is an educational preparation metric, not an employer hiring decision.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 5 of 15</span>
+      <span>AI Resume Analyzer</span>
+    </div>
+  </div>
+
+  <!-- Slide 6: Mock Interview -->
+  <div class="slide-container" id="slide-6">
+    <div class="slide-header">
+      <div class="badge">MODULE 2</div>
+      <h2 class="slide-title">AI Mock Interview Studio</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Interview Modes</div>
+        <ul>
+          <li><strong>Technical Track:</strong> In-depth questions spanning MERN, Java, Spring Boot, SQL, and DSA.</li>
+          <li><strong>HR / Behavioral Track:</strong> Situational questions assessing teamwork, leadership, and STAR methodology.</li>
+          <li><strong>Live Countdown Timer:</strong> Simulates placement pressure.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">5-Criteria AI Evaluation</div>
+        <ul>
+          <li>1. Relevance (20 pts)</li>
+          <li>2. Technical Accuracy (20 pts)</li>
+          <li>3. Clarity & Structure (20 pts)</li>
+          <li>4. Completeness & Edge Cases (20 pts)</li>
+          <li>5. Communication Phrasing (20 pts)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title warning">Viva Coaching</div>
+        <ul>
+          <li>Instant constructive AI critiques per question.</li>
+          <li>Recommended viva phrasing tips for placement interviews.</li>
+          <li>Final overall score out of 100 with performance badge.</li>
+          <li>Full interview history stored in MongoDB.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 6 of 15</span>
+      <span>Mock Interview Studio</span>
+    </div>
+  </div>
+
+  <!-- Slide 7: Aptitude & Coding Practice -->
+  <div class="slide-container" id="slide-7">
+    <div class="slide-header">
+      <div class="badge">MODULE 3</div>
+      <h2 class="slide-title">Aptitude & Coding Practice Suite</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">5 Assessment Domains</div>
+        <ul>
+          <li><strong>Quantitative Aptitude:</strong> Time & Work, Speed & Distance, Profit/Loss, Percentages, Probability.</li>
+          <li><strong>Logical Reasoning:</strong> Syllogisms, Coding-Decoding, Blood Relations, Number Series.</li>
+          <li><strong>Verbal Ability:</strong> Sentence Correction, Reading Comprehension, Technical Phrasing.</li>
+          <li><strong>Core CS Subjects:</strong> Data Structures, Operating Systems (Threads, Deadlocks), DBMS (SQL, Normalization), Networks.</li>
+          <li><strong>Coding Challenges:</strong> Algorithmic problem-solving with time and space complexity constraints.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Test Room & Learning Solutions</div>
+        <ul>
+          <li><strong>Interactive Question Palette:</strong> Tracks Answered, Flagged for Review, and Unvisited states.</li>
+          <li><strong>Timed Session Engine:</strong> Real-time clock with automatic test submission on timer expiration.</li>
+          <li><strong>Detailed Viva Explanations:</strong> Every question includes step-by-step mathematical or code solutions.</li>
+          <li><strong>Sanitized Delivery:</strong> Correct answers are never sent to client during active tests.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 7 of 15</span>
+      <span>Aptitude & Coding Suite</span>
+    </div>
+  </div>
+
+  <!-- Slide 8: Career Roadmaps & Jobs -->
+  <div class="slide-container" id="slide-8">
+    <div class="slide-header">
+      <div class="badge">MODULE 4</div>
+      <h2 class="slide-title">Career Roadmaps & Placement Portal</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Milestone Career Roadmaps</div>
+        <ul>
+          <li>Curated learning roadmaps for MERN Stack, Java, Full Stack, and Frontend engineers.</li>
+          <li>Interactive checklist items with real-time percentage completion calculation.</li>
+          <li>Curated references to industry documentation, open-source guides, and DSA sheets.</li>
+          <li>Guided project recommendations to bridge detected resume skill gaps.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Placement & Internship Portal</div>
+        <ul>
+          <li>Transparent Match Formula: <code>Match % = (75% × Required) + (25% × Preferred)</code>.</li>
+          <li>Search placement opportunities with Work Mode (Remote, Hybrid, Onsite) filters.</li>
+          <li>Job bookmarking and 1-click application submission with personal candidate notes.</li>
+          <li>Real-time application status tracking (Applied, Review, Shortlisted).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 8 of 15</span>
+      <span>Roadmaps & Placements</span>
+    </div>
+  </div>
+
+  <!-- Slide 9: Admin Console -->
+  <div class="slide-container" id="slide-9">
+    <div class="slide-header">
+      <div class="badge">MODULE 5</div>
+      <h2 class="slide-title">Admin Governance Console</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Platform Analytics</div>
+        <ul>
+          <li>Live KPI metrics aggregated directly from MongoDB.</li>
+          <li>Total registered student counts.</li>
+          <li>Total parsed resumes and ATS score distributions.</li>
+          <li>Completed mock interviews and average scores.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Candidate Governance</div>
+        <ul>
+          <li>Paginated student directory with search filters.</li>
+          <li>1-Click Account Status Toggle: Activate or Suspend candidates.</li>
+          <li>Inspect student readiness index and resume scores.</li>
+          <li>Strict RBAC: Protected by <code>requireRole('admin')</code>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title warning">Job & Question CRUD</div>
+        <ul>
+          <li>Full CRUD controls to add and manage placement job openings.</li>
+          <li>Question Bank Management: Add, update, and remove questions.</li>
+          <li>Category tagging across Quant, Core CS, and Coding.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 9 of 15</span>
+      <span>Admin Governance</span>
+    </div>
+  </div>
+
+  <!-- Slide 10: Security Architecture -->
+  <div class="slide-container" id="slide-10">
+    <div class="slide-header">
+      <div class="badge">SECURITY & RBAC</div>
+      <h2 class="slide-title">Enterprise Security & Authentication Architecture</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">HttpOnly Cookie Sessions</div>
+        <ul>
+          <li><strong>Zero Long-Lived Tokens in localStorage:</strong> JWT is delivered strictly in <code>HttpOnly, SameSite</code> cookies with path <code>/</code>.</li>
+          <li><strong>XSS Mitigation:</strong> Client JavaScript cannot read the token, neutralizing XSS exfiltration risks.</li>
+          <li><strong>Dual Token Acceptance:</strong> Middleware inspects cookies first, falling back to Bearer tokens for test suites and scripts.</li>
+          <li><strong>Session Termination:</strong> Logout endpoint clears cookie with Expired timestamp (1970-01-01).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Privilege Defense & Hardening</div>
+        <ul>
+          <li><strong>Bcrypt Password Encryption:</strong> 10 salt rounds in pre-save hooks; plain text never stored.</li>
+          <li><strong>select: false:</strong> Password field is excluded from queries by default.</li>
+          <li><strong>Privilege Defense:</strong> Public registration strictly enforces <code>role: 'student'</code>. Users cannot grant themselves admin status.</li>
+          <li><strong>Rate Limiting:</strong> <code>authLimiter</code> caps auth requests to 25 / 15 min to prevent credential brute-forcing.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 10 of 15</span>
+      <span>Security Architecture</span>
+    </div>
+  </div>
+
+  <!-- Slide 11: Database Schema -->
+  <div class="slide-container" id="slide-11">
+    <div class="slide-header">
+      <div class="badge">DATABASE DESIGN</div>
+      <h2 class="slide-title">Database Design & Data Models (MongoDB)</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Candidate & AI Collections</div>
+        <ul>
+          <li><strong>User:</strong> Credentials, profile (CGPA, degree, links), target role, skills, accountStatus.</li>
+          <li><strong>Resume:</strong> User reference, file metadata, physical storage path, cleaned extracted text.</li>
+          <li><strong>ResumeAnalysis:</strong> Overall score, 4 category scores, identified/missing skills, recommendations, disclaimer.</li>
+          <li><strong>InterviewSession:</strong> Track (Tech/HR), target role, questions, answers, 5-criteria scores, critiques.</li>
+          <li><strong>CareerRoadmap:</strong> Personalized milestones, checklist items, and completion percentages.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Placement & Practice Collections</div>
+        <ul>
+          <li><strong>Job:</strong> Title, company, location, type, required & preferred skills, salary, deadline.</li>
+          <li><strong>SavedJob:</strong> Candidate bookmark references.</li>
+          <li><strong>JobApplication:</strong> Application notes and status tracking (applied, review, shortlisted).</li>
+          <li><strong>Question:</strong> Category, difficulty, question text, options, correct answer, viva explanation.</li>
+          <li><strong>Assessment:</strong> Timed session records, answers submitted, score breakdown, and time spent.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 11 of 15</span>
+      <span>Database Schema</span>
+    </div>
+  </div>
+
+  <!-- Slide 12: Testing & Verification -->
+  <div class="slide-container" id="slide-12">
+    <div class="slide-header">
+      <div class="badge">QUALITY ASSURANCE</div>
+      <h2 class="slide-title">Testing, Verification & Quality Assurance</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title accent">100% Test Pass Rate</div>
+        <ul>
+          <li><strong>8 Test Suites:</strong> 70 out of 70 automated tests pass cleanly.</li>
+          <li><code>auth.test.js</code> (15 tests)</li>
+          <li><code>resume_analyzer_isolated.test.js</code> (12 tests)</li>
+          <li><code>admin.test.js</code> (9 tests)</li>
+          <li><code>profile_resume.test.js</code> (8 tests)</li>
+          <li><code>interview.test.js</code> & <code>jobs.test.js</code> (7 tests each)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Mock Isolation (Zero Cost)</div>
+        <ul>
+          <li>Uses <code>jest.mock('@google/generative-ai')</code>.</li>
+          <li>Guarantees zero paid API calls during CI/CD test execution.</li>
+          <li>Tests verify automatic fallback if AI quota is exhausted.</li>
+          <li>Tests verify 401 on unauthenticated access to student dashboard.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title warning">Build & Deployment Ready</div>
+        <ul>
+          <li>Frontend compiles cleanly via <code>npm run build</code> (Vite).</li>
+          <li><code>frontend/vercel.json</code> configured for SPA client routing.</li>
+          <li><code>render.yaml</code> configured for automated backend deployment.</li>
+          <li>Clean main branch on GitHub with zero credentials checked in.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 12 of 15</span>
+      <span>Testing & Quality</span>
+    </div>
+  </div>
+
+  <!-- Slide 13: Live Demo Script -->
+  <div class="slide-container" id="slide-13">
+    <div class="slide-header">
+      <div class="badge">DEMONSTRATION PLAN</div>
+      <h2 class="slide-title">Live Demonstration Walkthrough (5-Minute Viva Plan)</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Student Flow Demonstration</div>
+        <ul>
+          <li>1. Open <code>http://localhost:5173</code> on web browser.</li>
+          <li>2. 1-Click Demo Login as Student (<code>student@careerpilot.ai</code>).</li>
+          <li>3. Demonstrate Student Dashboard with real-time Placement Readiness Index (84%).</li>
+          <li>4. Navigate to AI Resume Analyzer, select role, and trigger Gemini ATS evaluation.</li>
+          <li>5. Inspect circular gauge, category bars, identified vs. missing skills, and capstone suggestions.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Interview, Quiz & Admin Governance</div>
+        <ul>
+          <li>6. Start Mock Interview, answer technical question, and show 5-criteria instant scoring.</li>
+          <li>7. Launch Aptitude Quiz, demonstrate timer, question palette, and technical explanations.</li>
+          <li>8. Switch to Admin Account (<code>admin@careerpilot.ai</code>).</li>
+          <li>9. Showcase platform KPI cards, candidate status toggle, and Job/Question CRUD.</li>
+          <li>10. Show DevTools Application tab: prove token is stored in HttpOnly cookie.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 13 of 15</span>
+      <span>Live Demo Walkthrough</span>
+    </div>
+  </div>
+
+  <!-- Slide 14: Conclusion & Future Scope -->
+  <div class="slide-container" id="slide-14">
+    <div class="slide-header">
+      <div class="badge">SUMMARY & ROADMAP</div>
+      <h2 class="slide-title">Conclusion & Future Enhancements</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Key Project Achievements</div>
+        <ul>
+          <li>Delivered a production-ready, full-stack platform addressing real campus placement challenges.</li>
+          <li>Integrated cutting-edge AI (Google Gemini 1.5 Flash) with fail-safe heuristic fallback architecture.</li>
+          <li>Implemented institutional-grade security with HttpOnly cookies, bcrypt hashing, and rate limiting.</li>
+          <li>Exhaustively tested with 70 automated tests and comprehensive academic documentation.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title accent">Future Roadmap</div>
+        <ul>
+          <li><strong>Real-Time Speech-to-Text:</strong> Live voice interviews with conversational AI speech synthesis (Whisper API).</li>
+          <li><strong>Collaborative Coding Sandbox:</strong> Live shared code editor with automated unit test execution via WebSockets.</li>
+          <li><strong>College Placement Cell Portal:</strong> Institutional dashboard allowing Training & Placement Officers (TPO) to track batch-wide hiring statistics.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Slide 14 of 15</span>
+      <span>Conclusion & Future Scope</span>
+    </div>
+  </div>
+
+  <!-- Slide 15: Q&A / Thank You -->
+  <div class="slide-container" id="slide-15">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+      <h1 style="font-size: 64px; font-weight: 900; color: #ffffff; margin-bottom: 12px;">Thank You!</h1>
+      <p style="font-size: 24px; color: #34d399; font-weight: 700; margin-bottom: 24px;">Questions & Viva Discussion</p>
+      <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 24px 48px; border-radius: 16px; max-width: 600px;">
+        <p style="font-size: 15px; color: #cbd5e1; margin-bottom: 8px;"><strong>Project:</strong> CareerPilot AI – Full-Stack MERN Platform</p>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 8px;"><strong>GitHub:</strong> github.com/kkt9519/AI-Based-Career-and-Placement-Preparation-Platform</p>
+        <p style="font-size: 13px; color: #64748b;">Department of Computer Science & Design</p>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>CareerPilot AI Defense</span>
+      <span>Q&A Session</span>
+    </div>
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="nav-controls">
+    <button class="nav-btn" onclick="prevSlide()">&larr; Previous</button>
+    <span class="slide-counter" id="counter">1 / 15</span>
+    <button class="nav-btn" onclick="nextSlide()">Next &rarr;</button>
+    <button class="nav-btn" onclick="toggleFullScreen()">&#x26F6; Fullscreen</button>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 15;
+
+    function showSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlide = index;
+
+      document.querySelectorAll('.slide-container').forEach((el, idx) => {
+        el.classList.toggle('active', idx + 1 === currentSlide);
+      });
+
+      document.getElementById('counter').innerText = `${currentSlide} / ${totalSlides}`;
+    }
+
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') nextSlide();
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevSlide();
+    });
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
