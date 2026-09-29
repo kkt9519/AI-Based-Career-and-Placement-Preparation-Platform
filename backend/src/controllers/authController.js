@@ -8,7 +8,42 @@ const {
   resetPasswordSchema,
 } = require('../validators/authValidator');
 
-// @desc    Register a new user (Student or Admin)
+// Helper to sign JWT and attach secure HttpOnly cookie
+const sendTokenResponse = (user, statusCode, res, message) => {
+  const token = generateToken(user._id, user.role);
+
+  const cookieExpiresDays = parseInt(process.env.COOKIE_EXPIRES_DAYS, 10) || 7;
+  const cookieOptions = {
+    httpOnly: true,
+    expires: new Date(Date.now() + cookieExpiresDays * 24 * 60 * 60 * 1000),
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    path: '/',
+  };
+
+  res.cookie('token', token, cookieOptions);
+
+  const userResponse = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    targetRole: user.targetRole,
+    skills: user.skills,
+    profile: user.profile,
+    profileCompletion: typeof user.calculateProfileCompletion === 'function' ? user.calculateProfileCompletion() : 0,
+    createdAt: user.createdAt,
+  };
+
+  res.status(statusCode).json({
+    success: true,
+    message,
+    token, // Provided for backwards compatibility with test suites & tools
+    user: userResponse,
+  });
+};
+
+// @desc    Register a new student user
 // @route   POST /api/auth/register
 // @access  Public
 const register = async (req, res, next) => {
@@ -23,41 +58,23 @@ const register = async (req, res, next) => {
       });
     }
 
+    // Force role: 'student' to strictly prevent self-assignment of admin privileges
     const user = await User.create({
       name: validatedData.name,
       email: validatedData.email,
       password: validatedData.password,
-      role: validatedData.role || 'student',
+      role: 'student',
       targetRole: validatedData.targetRole || 'Software Engineer',
       skills: validatedData.skills || [],
     });
 
-    const token = generateToken(user._id, user.role);
-
-    const userResponse = {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      targetRole: user.targetRole,
-      skills: user.skills,
-      profile: user.profile,
-      profileCompletion: user.calculateProfileCompletion(),
-      createdAt: user.createdAt,
-    };
-
-    res.status(201).json({
-      success: true,
-      message: 'Account registered successfully.',
-      token,
-      user: userResponse,
-    });
+    sendTokenResponse(user, 201, res, 'Account registered successfully.');
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Authenticate user & get token
+// @desc    Authenticate user & get token with HttpOnly cookie
 // @route   POST /api/auth/login
 // @access  Public
 const login = async (req, res, next) => {
@@ -89,26 +106,7 @@ const login = async (req, res, next) => {
       });
     }
 
-    const token = generateToken(user._id, user.role);
-
-    const userResponse = {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      targetRole: user.targetRole,
-      skills: user.skills,
-      profile: user.profile,
-      profileCompletion: user.calculateProfileCompletion(),
-      createdAt: user.createdAt,
-    };
-
-    res.status(200).json({
-      success: true,
-      message: 'Logged in successfully.',
-      token,
-      user: userResponse,
-    });
+    sendTokenResponse(user, 200, res, 'Logged in successfully.');
   } catch (error) {
     next(error);
   }
@@ -149,10 +147,18 @@ const getMe = async (req, res, next) => {
   }
 };
 
-// @desc    Log out user / invalidate session client-side
+// @desc    Log out user / clear session cookie
 // @route   POST /api/auth/logout
 // @access  Public
 const logout = async (req, res) => {
+  res.cookie('token', '', {
+    httpOnly: true,
+    expires: new Date(0),
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    path: '/',
+  });
+
   res.status(200).json({
     success: true,
     message: 'Logged out successfully.',

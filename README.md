@@ -126,6 +126,7 @@ NODE_ENV=development
 MONGODB_URI=mongodb://127.0.0.1:27017/careerpilot_ai
 JWT_SECRET=super_secret_careerpilot_jwt_key_2026_dev
 JWT_EXPIRES_IN=7d
+COOKIE_EXPIRES_DAYS=7
 CLIENT_URL=http://localhost:5173
 MAX_FILE_SIZE_MB=5
 
@@ -135,7 +136,21 @@ MAX_FILE_SIZE_MB=5
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-> 🔒 **Security Notice:** The `GEMINI_API_KEY` is loaded strictly on the Node.js backend (`process.env.GEMINI_API_KEY`). It is never bundled into client-side code, exposed to the browser, or committed to version control (`.gitignore` protects all `.env` files).
+> 🔒 **Security Notice:** The `GEMINI_API_KEY` and `JWT_SECRET` are loaded strictly on the Node.js backend (`process.env`). They are never bundled into client-side code, exposed to the browser, or committed to version control (`.gitignore` protects all `.env` files).
+
+---
+
+## 🔐 Secure User Authentication Architecture
+
+CareerPilot AI implements enterprise-grade authentication:
+1. **HttpOnly & SameSite Cookies**: Authentication tokens (`token`) are delivered in `HttpOnly`, `SameSite: Lax` (or `None` in production HTTPS) cookies with path `/`. JavaScript running in the browser cannot access the token, preventing Cross-Site Scripting (XSS) token exfiltration.
+2. **Zero Long-Lived Storage in localStorage**: Tokens are never persisted in browser `localStorage`. On application boot, the React client verifies the session via `authAPI.getMe()` using the automatic cookie handshake.
+3. **Dual Token Retrieval on Backend**: Middleware checks `req.cookies.token` first for browser sessions, with seamless fallback to `Authorization: Bearer <token>` headers for automated tests, Postman, and CLI tools.
+4. **Bcrypt Password Hashing**: Passwords are hashed with `bcryptjs` using 10 salt rounds in Mongoose `pre('save')` hooks. Passwords are never stored in plain text and are excluded by default (`select: false`).
+5. **Privilege Escalation Defense**: Public registration (`POST /api/auth/register`) enforces `role: 'student'`. Users cannot grant themselves administrator privileges. Admin accounts can only be provisioned via database seed scripts or by authorized administrators.
+6. **Rate Limiting**: Dedicated rate limiting on `/api/auth/login` and `/api/auth/register` (25 requests per 15 minutes) prevents credential brute-forcing and email enumeration attacks.
+7. **Cross-Origin Resource Sharing (CORS)**: Configured with `credentials: true` and origin validation for local development and deployed frontend URLs.
+8. **Session Termination**: `POST /api/auth/logout` explicitly clears the `token` cookie with an expired timestamp (`Expires: 1970-01-01`).
 
 ---
 
@@ -202,6 +217,12 @@ For examiner reviews and live project defense:
 
 ## 🧪 Automated Testing & Code Quality
 
+### Run Authentication & Authorization Test Suite:
+```bash
+cd backend
+npx jest tests/auth.test.js --runInBand
+```
+
 ### Run Isolated AI Resume Analyzer Test Suite (Mocked Gemini SDK - 0 Paid API Calls):
 ```bash
 cd backend
@@ -222,7 +243,7 @@ npm run test:coverage
 
 **Latest Test Results:**
 * **Test Suites**: 8 passed, 8 total
-* **Tests**: 63 passed, 63 total
+* **Tests**: 70 passed, 70 total
 * **Mock Isolation**: 100% mocked Google Generative AI in automated tests (zero paid API calls, fast deterministic CI/CD execution).
 
 ---

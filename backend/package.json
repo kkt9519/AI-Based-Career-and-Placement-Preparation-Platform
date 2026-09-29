@@ -11,12 +11,20 @@
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "test:coverage": "cross-env NODE_ENV=test jest --coverage --runInBand --detectOpenHandles --forceExit"
   },
-  "keywords": ["mern", "placement-preparation", "career-guidance", "ai", "gemini", "resume-analyzer"],
+  "keywords": [
+    "mern",
+    "placement-preparation",
+    "career-guidance",
+    "ai",
+    "gemini",
+    "resume-analyzer"
+  ],
   "author": "CareerPilot AI Team",
   "license": "ISC",
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -37,7 +45,9 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testMatch": ["**/tests/**/*.test.js"],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
     "verbose": true
   }
 }

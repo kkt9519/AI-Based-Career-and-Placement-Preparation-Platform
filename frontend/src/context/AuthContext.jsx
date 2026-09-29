@@ -4,32 +4,28 @@ import { authAPI } from '../services/api';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('careerpilot_user');
-    return saved ? JSON.parse(saved) : null;
-  });
-  const [token, setToken] = useState(() => localStorage.getItem('careerpilot_token') || null);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const initAuth = async () => {
-      const storedToken = localStorage.getItem('careerpilot_token');
-      if (storedToken) {
-        try {
-          const res = await authAPI.getMe();
-          if (res.data.success && res.data.user) {
-            setUser(res.data.user);
-            localStorage.setItem('careerpilot_user', JSON.stringify(res.data.user));
-          }
-        } catch (error) {
-          console.error('Session verification failed:', error.message);
-          localStorage.removeItem('careerpilot_token');
-          localStorage.removeItem('careerpilot_user');
+      try {
+        // Verify session using HttpOnly cookie automatically sent by browser
+        const res = await authAPI.getMe();
+        if (res.data.success && res.data.user) {
+          setUser(res.data.user);
+          setToken('cookie-session');
+        } else {
           setUser(null);
           setToken(null);
         }
+      } catch (error) {
+        setUser(null);
+        setToken(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     initAuth();
@@ -39,11 +35,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await authAPI.login({ email, password });
       if (res.data.success) {
-        const { token, user } = res.data;
-        setToken(token);
+        const { user } = res.data;
         setUser(user);
-        localStorage.setItem('careerpilot_token', token);
-        localStorage.setItem('careerpilot_user', JSON.stringify(user));
+        setToken('cookie-session');
+        // Do not store long-lived tokens in localStorage (HttpOnly cookie manages session)
+        localStorage.removeItem('careerpilot_token');
         return { success: true, user };
       }
       return { success: false, message: res.data.message || 'Login failed' };
@@ -57,11 +53,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await authAPI.register(userData);
       if (res.data.success) {
-        const { token, user } = res.data;
-        setToken(token);
+        const { user } = res.data;
         setUser(user);
-        localStorage.setItem('careerpilot_token', token);
-        localStorage.setItem('careerpilot_user', JSON.stringify(user));
+        setToken('cookie-session');
+        localStorage.removeItem('careerpilot_token');
         return { success: true, user };
       }
       return { success: false, message: res.data.message || 'Registration failed' };
@@ -85,7 +80,6 @@ export const AuthProvider = ({ children }) => {
 
   const updateUser = (updatedUser) => {
     setUser(updatedUser);
-    localStorage.setItem('careerpilot_user', JSON.stringify(updatedUser));
   };
 
   const refreshUser = async () => {
@@ -93,7 +87,7 @@ export const AuthProvider = ({ children }) => {
       const res = await authAPI.getMe();
       if (res.data.success && res.data.user) {
         setUser(res.data.user);
-        localStorage.setItem('careerpilot_user', JSON.stringify(res.data.user));
+        setToken('cookie-session');
       }
     } catch (err) {
       console.error('Failed to refresh user profile:', err);
@@ -106,7 +100,7 @@ export const AuthProvider = ({ children }) => {
         user,
         token,
         loading,
-        isAuthenticated: !!token && !!user,
+        isAuthenticated: !!user,
         isAdmin: user?.role === 'admin',
         login,
         register,

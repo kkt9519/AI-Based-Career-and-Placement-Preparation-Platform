@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 const errorHandler = require('./middleware/errorHandler');
@@ -20,26 +21,30 @@ const app = express();
 // Security HTTP headers
 app.use(helmet());
 
-// CORS configuration
+// CORS configuration with credentials support
 const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:5173',
-  'http://localhost:3000',
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
   'http://127.0.0.1:5173',
-];
+  'http://localhost:3000',
+].filter(Boolean);
 
 app.use(
   cors({
     origin: function (origin, callback) {
       // Allow requests with no origin (like mobile apps, curl, or postman)
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
+      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+        callback(null, origin || true);
       } else {
-        callback(null, true); // Allow all in development
+        callback(new Error('Blocked by CORS policy'));
       }
     },
     credentials: true,
   })
 );
+
+// Cookie parser middleware (must precede routes)
+app.use(cookieParser());
 
 // Rate limiter for general APIs
 const limiter = rateLimit({
