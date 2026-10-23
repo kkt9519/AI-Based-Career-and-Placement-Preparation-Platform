@@ -44,7 +44,10 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: res.data.message || 'Login failed' };
     } catch (error) {
-      const msg = error.response?.data?.message || error.message || 'Invalid credentials';
+      let msg = error.response?.data?.message || error.message || 'Invalid credentials';
+      if (error.response?.status === 405) {
+        msg = 'Backend server not reachable on this host (Status 405). If deployed on Vercel, ensure the backend is active on Render/Atlas. For local demo, run backend on port 5000.';
+      }
       return { success: false, message: msg };
     }
   };
@@ -61,7 +64,10 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: res.data.message || 'Registration failed' };
     } catch (error) {
-      const msg = error.response?.data?.message || error.message || 'Registration failed';
+      let msg = error.response?.data?.message || error.message || 'Registration failed';
+      if (error.response?.status === 405) {
+        msg = 'Backend server not reachable on this host (Status 405). If deployed on Vercel, ensure the backend is active on Render/Atlas. For local demo, run backend on port 5000.';
+      }
       return { success: false, message: msg };
     }
   };
